@@ -1,3 +1,7 @@
+# Public statistics: any site (including the Economy Graph web app) may read them.
+/*
+  Access-Control-Allow-Origin: *
+
 # The app checks manifest.json first, so keep it fresh; data files change at most weekly.
 /manifest.json
   Cache-Control: public, max-age=300
