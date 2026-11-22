@@ -31,6 +31,13 @@ ECOS_API_KEY=발급받은키 python3 pipeline/build.py
 
 앱은 `out/manifest.json`을 먼저 받아, 해시가 바뀐 파일만 다시 받는다.
 
+## 배포 (Cloudflare Workers Static Assets, 무료)
+
+- 주소: `https://economy-graph-data.jooyungchun.workers.dev/` (`out/` 폴더가 그대로 배포됨, `wrangler.jsonc`)
+- Workers Builds가 GitHub 저장소와 연결되어 있어, `main`에 push하면(주간 데이터 커밋 포함) 자동으로 다시 배포된다.
+- 캐시 (`out/_headers`): `manifest.json` 5분, `us/*`·`kr/*` 1시간. 전송은 brotli/gzip 압축.
+- 앱이 처음 받는 데이터: 약 200KB (gzip 기준). 2026-11-22에 배포본과 저장소의 해시가 일치함을 확인함.
+
 ## 결과 파일 (`pipeline/out/`)
 
 | 파일 | 내용 | 크기 (미국, 32개 지표) |
