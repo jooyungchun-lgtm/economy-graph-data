@@ -1,0 +1,9 @@
+# The app checks manifest.json first, so keep it fresh; data files change at most weekly.
+/manifest.json
+  Cache-Control: public, max-age=300
+
+/us/*
+  Cache-Control: public, max-age=3600
+
+/kr/*
+  Cache-Control: public, max-age=3600

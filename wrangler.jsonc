@@ -1,0 +1,9 @@
+// Cloudflare Workers Static Assets: serves the out/ folder as-is (no Worker script, no build).
+// Connected via Workers Builds: every push to main (including the weekly data commit) redeploys.
+{
+  "name": "economy-graph-data",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./out"
+  }
+}
