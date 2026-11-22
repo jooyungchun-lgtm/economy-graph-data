@@ -1,0 +1,24 @@
+{
+ "schema": 1,
+ "generated_utc": "2026-11-22T10:48:22+00:00",
+ "through": "2026-10",
+ "complete": true,
+ "files": {
+  "kr/edges.json": {
+   "sha256": "802ff73571fb30b09bbc0562c5b304434e6dade1e837d12bc6a89ad604ef2bfd",
+   "bytes": 139321
+  },
+  "kr/series.json": {
+   "sha256": "8192b0bb52eb15c33e8df4f6c41ee3ddd059e41b23b7b842d945fccc4b532604",
+   "bytes": 39761
+  },
+  "us/edges.json": {
+   "sha256": "5e91d6c73e8494714192239219822571882a65a2f7acb757efb9ce7dc85547b9",
+   "bytes": 766419
+  },
+  "us/series.json": {
+   "sha256": "4d01eeb5e0c4c835f6340b3a76c3fb2b712449f455ae549982ee7364079e6785",
+   "bytes": 105708
+  }
+ }
+}

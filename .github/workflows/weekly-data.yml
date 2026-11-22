@@ -1,0 +1,45 @@
+name: Weekly data update
+
+on:
+  schedule:
+    - cron: "0 18 * * 0"   # Sunday 18:00 UTC = Monday 03:00 KST
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: data-update
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # Standard library only: nothing to install.
+      # build.py exits 1 if any source fails; then nothing is committed and the
+      # previous (complete) data stays published. GitHub emails the owner on failure.
+      - name: Build data
+        env:
+          ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
+          BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+        run: python build.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add out
+          if git diff --cached --quiet; then
+            echo "No data change."
+          else
+            git commit -m "data: update through $(python -c 'import json;print(json.load(open("out/manifest.json"))["through"])')"
+            git push
+          fi

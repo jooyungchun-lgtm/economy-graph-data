@@ -1,0 +1,6 @@
+.cache/
+__pycache__/
+*.part
+*.bad
+archive/
+.DS_Store

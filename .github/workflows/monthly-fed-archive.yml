@@ -1,0 +1,54 @@
+name: Monthly Fed archive
+
+# The Federal Reserve Data Download Program retires its package downloads on 2027-03-31.
+# Until then, keep a dated copy of every release as GitHub Release assets
+# (outside git history, so the repository stays small).
+
+on:
+  schedule:
+    - cron: "0 19 2 * *"   # 2nd of each month, 19:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Stop after the DDP retirement date
+        id: gate
+        run: |
+          if [ "$(date -u +%Y%m%d)" -gt 20270331 ]; then
+            echo "DDP package downloads retired; nothing to archive."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.gate.outputs.skip != 'true'
+
+      - uses: actions/setup-python@v5
+        if: steps.gate.outputs.skip != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Download and verify all releases
+        if: steps.gate.outputs.skip != 'true'
+        run: python archive_fed.py
+
+      - name: Publish as a GitHub Release
+        if: steps.gate.outputs.skip != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          day=$(date -u +%Y-%m-%d)
+          dir="archive/fed/$day"
+          tag="fed-archive-$day"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Release $tag already exists."
+          else
+            gh release create "$tag" "$dir"/* \
+              --title "Federal Reserve DDP archive $day" \
+              --notes "All Federal Reserve Board DDP release packages and the EBP file, downloaded $day. Public domain data. Checksums in manifest.json."
+          fi
