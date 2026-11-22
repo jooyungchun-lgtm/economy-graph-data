@@ -31,6 +31,10 @@ WINDOW = 60                # rolling window (months)
 MIN_OBS = 48               # minimum overlapping observations in a window (80%)
 EDGE_METHOD = "rank"       # rank (Spearman) resists one-off shocks such as 2020
 SHOW_TIERS = [0.4, 0.55, 0.7]  # app: hide below 0.4, three line thicknesses
+# Textbook relationships are long-run claims, so they are judged over 20 years (user decision,
+# 2026-11-22). Series shorter than that use what exists, but at least 5 years.
+THEORY_WINDOW = 240
+THEORY_MIN_OBS = 60
 STRONG, WEAK = 0.30, 0.15  # |r| thresholds for the verdict
 
 
@@ -151,12 +155,12 @@ def corr(a: dict, b: dict, lag: int = 0, lo: int | None = None, hi: int | None =
     return pearson([a[m] for m in ms], [b[m + lag] for m in ms]), len(ms)
 
 
-def rolling(a: dict, b: dict, lag: int, start: int, end: int):
-    """Rolling WINDOW-month correlation of a[m] vs b[m+lag], one value per window end month."""
+def rolling(a: dict, b: dict, lag: int, start: int, end: int, window: int = WINDOW, min_obs: int = MIN_OBS):
+    """Rolling `window`-month correlation of a[m] vs b[m+lag], one value per window end month."""
     vals = []
     for e in range(start, end + 1):
-        ms = [m for m in range(e - WINDOW + 1, e + 1) if m in a and m + lag in b]
-        if len(ms) < MIN_OBS:
+        ms = [m for m in range(e - window + 1, e + 1) if m in a and m + lag in b]
+        if len(ms) < min_obs:
             vals.append(None)
             continue
         xs, ys = [a[m] for m in ms], [b[m + lag] for m in ms]
@@ -209,8 +213,9 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
     for a, b, sign, lag in pairs:
         if a not in levels or b not in levels:
             continue
-        start_a = lo + WINDOW - 1                       # window end, in A's months
-        vals = rolling(chE[a], chE[b], lag, start_a, last - lag)
+        # window end, in A's months; full history (from 1970) so 20-year windows exist early on
+        start_a = mi(HISTORY_FROM) + THEORY_MIN_OBS - 1
+        vals = rolling(chE[a], chE[b], lag, start_a, last - lag, THEORY_WINDOW, THEORY_MIN_OBS)
         k = next((i for i, r in enumerate(vals) if r is not None), None)
         if k is None:
             continue
@@ -220,8 +225,8 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
                        "r": vals[k:],
                        "typical": {"p10": pct(aligned, 0.1), "p50": pct(aligned, 0.5), "p90": pct(aligned, 0.9)}})
     with open(os.path.join(OUT, code, "theory.json"), "w") as f:
-        json.dump({"country": code, "window": WINDOW, "change_months": EDGE_H, "method": EDGE_METHOD,
-                   "pairs": theory}, f, separators=(",", ":"))
+        json.dump({"country": code, "window": THEORY_WINDOW, "min_months": THEORY_MIN_OBS, "change_months": EDGE_H,
+                   "method": EDGE_METHOD, "pairs": theory}, f, separators=(",", ":"))
 
     # report section
     name_of = {row[0]: row[1] for row in spec}

@@ -1,6 +1,6 @@
 # 데이터 수집 시제품 결과
 
-생성: 2026-11-22 12:22 UTC · 기준월: 2026-10까지
+생성: 2026-11-22 12:28 UTC · 기준월: 2026-10까지
 
 ## US
 
@@ -110,7 +110,7 @@
 | EUR/USD | Federal Reserve Board H.10 | 1999-01 | 2026-10 | 334 |
 | USD/JPY | Federal Reserve Board H.10 | 1971-01 | 2026-10 | 670 |
 
-파일 크기: series.json 103KB, edges.json 748KB, theory.json 58KB
+파일 크기: series.json 103KB, edges.json 748KB, theory.json 76KB
 
 ## KR
 
