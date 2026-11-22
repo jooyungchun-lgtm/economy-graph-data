@@ -80,43 +80,66 @@ KR = [
 # global nodes shown on the Korea graph as well
 KR_SHARED = ["gold", "btc", "eth", "wti", "usd_broad", "ust10y", "fed_funds"]
 
-# ---- expected relationships (A, B, expected sign, lag: B measured `lag` months after A) ----
+# ---- textbook relationships ------------------------------------------------------------
+# (A, B, expected sign, lag): B is measured `lag` months after A. These are the theory baseline the
+# app always draws; the data only says how strongly each one holds in a given era (rolling window).
+# Concept names and explanations live in the app repository (shared/catalog.json, key "A|B").
 PAIRS_US = [
-    ("fed_funds", "ust2y", +1, 0),
-    ("fed_funds", "usd_broad", +1, 0),
-    ("fed_funds", "unemployment", +1, 12),
-    ("tbill3m", "fed_funds", +1, 0),
-    ("ust10y", "ust30y", +1, 0),
-    ("real10y", "gold", -1, 0),
-    ("usd_broad", "gold", -1, 0),
+    # monetary policy and the yield curve
+    ("fed_funds", "ust2y", +1, 0),          # expectations hypothesis
+    ("fed_funds", "tbill3m", +1, 0),        # money-market arbitrage
+    ("ust2y", "ust10y", +1, 0),             # term structure
+    ("ust10y", "ust30y", +1, 0),            # term structure
+    ("fed_funds", "curve_10y2y", -1, 0),    # tightening flattens the curve
+    ("cpi_yoy", "fed_funds", +1, 6),        # Taylor rule (inflation gap)
+    ("core_cpi_yoy", "fed_funds", +1, 6),   # Taylor rule (core)
+    ("unemployment", "fed_funds", -1, 3),   # Taylor rule (output gap)
+    ("fed_assets", "real10y", -1, 0),       # QE lowers term premia
+    # Fisher equation
+    ("real10y", "ust10y", +1, 0),
+    ("breakeven_5y", "ust10y", +1, 0),
+    # labour market
+    ("ip", "unemployment", -1, 0),          # Okun's law
+    ("payrolls_chg", "unemployment", -1, 0),
+    ("epop", "unemployment", -1, 0),
+    ("unemployment", "wage_yoy", -1, 6),    # wage Phillips curve
+    ("job_openings", "wage_yoy", +1, 0),    # labour-market tightness
+    ("unemployment", "cpi_yoy", -1, 12),    # Phillips curve
+    # inflation
+    ("m2", "cpi_yoy", +1, 12),              # quantity theory of money
+    ("wti", "cpi_yoy", +1, 0),              # cost-push (energy)
+    ("ppi_yoy", "cpi_yoy", +1, 3),          # producer-to-consumer pass-through
+    ("wti", "breakeven_5y", +1, 0),         # energy and inflation expectations
+    # credit and the cycle
+    ("ebp", "ip", -1, 6),                   # financial accelerator
+    ("curve_10y2y", "unemployment", -1, 12),  # yield-curve recession signal
+    ("copper", "ip", +1, 0),                # industrial demand
+    # dollar, commodities and assets
+    ("fed_funds", "usd_broad", +1, 0),      # interest-rate parity
+    ("usd_broad", "eurusd", -1, 0),         # definition
+    ("usd_broad", "usdjpy", +1, 0),         # definition
+    ("usd_broad", "gold", -1, 0),           # dollar pricing of commodities
     ("usd_broad", "wti", -1, 0),
-    ("usd_broad", "eurusd", -1, 0),
-    ("cpi_yoy", "fed_funds", +1, 6),
-    ("core_cpi_yoy", "fed_funds", +1, 6),
-    ("cpi_yoy", "wti", +1, 0),
-    ("cpi_yoy", "wage_yoy", +1, 0),
-    ("ppi_yoy", "cpi_yoy", +1, 0),
-    ("breakeven_5y", "wti", +1, 0),
-    ("curve_10y2y", "unemployment", -1, 12),
-    ("unemployment", "payrolls_chg", -1, 0),
-    ("job_openings", "wage_yoy", +1, 0),
-    ("ip", "unemployment", -1, 0),
-    ("m2", "cpi_yoy", +1, 12),
-    ("fed_assets", "btc", +1, 0),
-    ("fed_assets", "real10y", -1, 0),
-    ("btc", "eth", +1, 0),
-    ("real10y", "btc", -1, 0),
-    ("copper", "ip", +1, 0),
-    ("wti", "brent", +1, 0),
-    ("ebp", "ip", -1, 6),
+    ("usd_broad", "copper", -1, 0),
+    ("real10y", "gold", -1, 0),             # opportunity cost of holding gold
+    ("real10y", "btc", -1, 0),              # discount rate and risk assets
+    ("gold", "silver", +1, 0),              # precious-metal substitutes
+    ("wti", "brent", +1, 0),                # same commodity
+    ("btc", "eth", +1, 0),                  # same asset class
 ]
 PAIRS_KR = [
-    ("kr_base", "kr_ktb3", +1, 0),
-    ("kr_cpi_yoy", "kr_base", +1, 6),
-    ("kr_base", "usdkrw", -1, 0),
-    ("kr_us_gap", "usdkrw", -1, 0),
-    ("kr_ktb10", "ust10y", +1, 0),
-    ("usd_broad", "usdkrw", +1, 0),
-    ("kr_curve", "kr_unemp", -1, 12),
-    ("wti", "kr_cpi_yoy", +1, 0),
+    ("kr_base", "kr_ktb3", +1, 0),          # expectations hypothesis
+    ("kr_ktb3", "kr_ktb10", +1, 0),         # term structure
+    ("kr_base", "kr_curve", -1, 0),         # tightening flattens the curve
+    ("kr_cpi_yoy", "kr_base", +1, 6),       # Taylor rule (inflation gap)
+    ("kr_unemp", "kr_base", -1, 3),         # Taylor rule (output gap)
+    ("kr_unemp", "kr_cpi_yoy", -1, 12),     # Phillips curve
+    ("kr_curve", "kr_unemp", -1, 12),       # yield-curve recession signal
+    ("fed_funds", "kr_base", +1, 3),        # policy spillover
+    ("ust10y", "kr_ktb10", +1, 0),          # global bond-market integration
+    ("kr_us_gap", "usdkrw", -1, 0),         # interest-rate parity
+    ("usd_broad", "usdkrw", +1, 0),         # global dollar cycle
+    ("usdkrw", "kr_cpi_yoy", +1, 6),        # import-price pass-through
+    ("wti", "kr_cpi_yoy", +1, 3),           # cost-push (imported energy)
+    ("btc", "eth", +1, 0),
 ]

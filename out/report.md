@@ -1,12 +1,12 @@
 # 데이터 수집 시제품 결과
 
-생성: 2026-11-22 11:02 UTC · 기준월: 2026-10까지
+생성: 2026-11-22 12:22 UTC · 기준월: 2026-10까지
 
 ## US
 
 ### 기대 관계 검증
 
-결과: ✅ 18 · 🟡 2 · ⚪ 7
+결과: ✅ 27 · 🟡 3 · ⚪ 4 · ❌ 1
 
 - 기간: 1990-01 ~ 2026-10 · 변화량 기준 상관계수 (금리는 차이, 가격은 로그 변화율)
 - `r 1m`: 월간 변화끼리 · `r 12m`: 12개월 변화끼리 (경기 흐름에 가까움, 겹치는 구간이라 표본이 실제보다 적은 효과)
@@ -18,52 +18,60 @@
 | A → B | 지연 | 기대 | r 1m | r 12m | 순위 12m | 최근 관계선 | 부호 유지율 | n | 판정 |
 |---|---|---|---|---|---|---|---|---|---|
 | Fed Funds Rate → 2Y Treasury Yield | 0 | + | +0.43 | +0.82 | +0.80 | +0.42 | 94% | 442 | ✅ |
-| Fed Funds Rate → US Dollar Index (Broad) | 0 | + | -0.18 | +0.04 | +0.16 | +0.05 | 56% | 238 | ⚪ |
-| Fed Funds Rate → Unemployment Rate | 12 | + | -0.01 | -0.08 | -0.05 | +0.34 | 70% | 428 | ⚪ |
-| 3M Treasury Bill → Fed Funds Rate | 0 | + | +0.76 | +0.98 | +0.97 | +0.91 | 100% | 442 | ✅ |
+| Fed Funds Rate → 3M Treasury Bill | 0 | + | +0.76 | +0.98 | +0.97 | +0.91 | 100% | 442 | ✅ |
+| 2Y Treasury Yield → 10Y Treasury Yield | 0 | + | +0.80 | +0.82 | +0.80 | +0.87 | 100% | 442 | ✅ |
 | 10Y Treasury Yield → 30Y Treasury Yield | 0 | + | +0.94 | +0.94 | +0.94 | +0.93 | 100% | 442 | ✅ |
-| 10Y Real Yield (TIPS) → Gold | 0 | − | -0.46 | -0.44 | -0.42 | -0.57 | 98% | 274 | ✅ |
-| US Dollar Index (Broad) → Gold | 0 | − | -0.42 | -0.52 | -0.53 | -0.49 | 100% | 238 | ✅ |
-| US Dollar Index (Broad) → WTI Crude Oil | 0 | − | -0.42 | -0.65 | -0.54 | +0.20 | 91% | 238 | ✅ |
-| US Dollar Index (Broad) → EUR/USD | 0 | − | -0.82 | -0.86 | -0.84 | -0.91 | 100% | 238 | ✅ |
+| Fed Funds Rate → Yield Curve (10Y-2Y) | 0 | − | -0.42 | -0.78 | -0.78 | -0.50 | 99% | 442 | ✅ |
 | CPI Inflation (YoY) → Fed Funds Rate | 6 | + | +0.04 | +0.16 | +0.22 | +0.18 | 75% | 435 | 🟡 |
 | Core CPI (YoY) → Fed Funds Rate | 6 | + | +0.09 | +0.23 | +0.20 | +0.23 | 73% | 435 | 🟡 |
-| CPI Inflation (YoY) → WTI Crude Oil | 0 | + | +0.45 | +0.71 | +0.75 | +0.67 | 100% | 440 | ✅ |
-| CPI Inflation (YoY) → Wage Growth (YoY) | 0 | + | -0.23 | -0.01 | +0.02 | +0.28 | 36% | 222 | ⚪ |
-| PPI Final Demand (YoY) → CPI Inflation (YoY) | 0 | + | +0.76 | +0.91 | +0.83 | +0.82 | 100% | 178 | ✅ |
-| 5Y Breakeven Inflation → WTI Crude Oil | 0 | + | +0.43 | +0.67 | +0.64 | +0.67 | 100% | 274 | ✅ |
-| Yield Curve (10Y-2Y) → Unemployment Rate | 12 | − | +0.03 | +0.15 | +0.16 | -0.31 | 55% | 428 | ⚪ |
-| Unemployment Rate → Nonfarm Payrolls (change) | 0 | − | -0.96 | -0.94 | -0.75 | -0.37 | 94% | 440 | ✅ |
-| Job Openings (JOLTS) → Wage Growth (YoY) | 0 | + | -0.25 | -0.11 | +0.17 | +0.22 | 45% | 223 | ⚪ |
-| Industrial Production → Unemployment Rate | 0 | − | -0.75 | -0.74 | -0.52 | -0.22 | 96% | 440 | ✅ |
-| M2 Money Supply → CPI Inflation (YoY) | 12 | + | +0.23 | +0.43 | +0.24 | +0.25 | 81% | 428 | ✅ |
-| Fed Balance Sheet → Bitcoin | 0 | + | +0.00 | +0.07 | -0.03 | -0.33 | 68% | 145 | ⚪ |
+| Unemployment Rate → Fed Funds Rate | 3 | − | -0.05 | -0.44 | -0.64 | -0.35 | 77% | 438 | ✅ |
 | Fed Balance Sheet → 10Y Real Yield (TIPS) | 0 | − | +0.20 | -0.09 | -0.19 | +0.03 | 43% | 274 | ⚪ |
-| Bitcoin → Ethereum | 0 | + | +0.54 | +0.89 | +0.89 | +0.84 | 100% | 123 | ✅ |
-| 10Y Real Yield (TIPS) → Bitcoin | 0 | − | -0.06 | -0.31 | -0.22 | -0.21 | 81% | 145 | ✅ |
-| Copper → Industrial Production | 0 | + | +0.12 | +0.37 | +0.22 | +0.18 | 79% | 442 | ✅ |
-| WTI Crude Oil → Brent Crude Oil | 0 | + | +0.94 | +0.98 | +0.98 | +0.98 | 100% | 442 | ✅ |
+| 10Y Real Yield (TIPS) → 10Y Treasury Yield | 0 | + | +0.78 | +0.80 | +0.76 | +0.93 | 100% | 274 | ✅ |
+| 5Y Breakeven Inflation → 10Y Treasury Yield | 0 | + | +0.26 | +0.34 | +0.34 | +0.32 | 100% | 274 | ✅ |
+| Industrial Production → Unemployment Rate | 0 | − | -0.75 | -0.74 | -0.52 | -0.22 | 96% | 440 | ✅ |
+| Nonfarm Payrolls (change) → Unemployment Rate | 0 | − | -0.96 | -0.94 | -0.75 | -0.37 | 94% | 440 | ✅ |
+| Employment-Population Ratio → Unemployment Rate | 0 | − | -0.95 | -0.96 | -0.78 | -0.34 | 97% | 440 | ✅ |
+| Unemployment Rate → Wage Growth (YoY) | 6 | − | -0.01 | -0.15 | -0.29 | +0.02 | 37% | 223 | 🟡 |
+| Job Openings (JOLTS) → Wage Growth (YoY) | 0 | + | -0.25 | -0.11 | +0.17 | +0.22 | 45% | 223 | ⚪ |
+| Unemployment Rate → CPI Inflation (YoY) | 12 | − | +0.17 | +0.23 | +0.10 | +0.07 | 43% | 428 | ❌ |
+| M2 Money Supply → CPI Inflation (YoY) | 12 | + | +0.23 | +0.43 | +0.24 | +0.25 | 81% | 428 | ✅ |
+| WTI Crude Oil → CPI Inflation (YoY) | 0 | + | +0.45 | +0.71 | +0.75 | +0.67 | 100% | 440 | ✅ |
+| PPI Final Demand (YoY) → CPI Inflation (YoY) | 3 | + | +0.17 | +0.85 | +0.69 | +0.36 | 58% | 175 | ✅ |
+| WTI Crude Oil → 5Y Breakeven Inflation | 0 | + | +0.43 | +0.67 | +0.64 | +0.67 | 100% | 274 | ✅ |
 | Excess Bond Premium → Industrial Production | 6 | − | -0.08 | -0.47 | -0.34 | -0.10 | 81% | 436 | ✅ |
+| Yield Curve (10Y-2Y) → Unemployment Rate | 12 | − | +0.03 | +0.15 | +0.16 | -0.31 | 55% | 428 | ⚪ |
+| Copper → Industrial Production | 0 | + | +0.12 | +0.37 | +0.22 | +0.18 | 79% | 442 | ✅ |
+| Fed Funds Rate → US Dollar Index (Broad) | 0 | + | -0.18 | +0.04 | +0.16 | +0.05 | 56% | 238 | ⚪ |
+| US Dollar Index (Broad) → EUR/USD | 0 | − | -0.82 | -0.86 | -0.84 | -0.91 | 100% | 238 | ✅ |
+| US Dollar Index (Broad) → USD/JPY | 0 | + | +0.31 | +0.30 | +0.28 | +0.72 | 100% | 238 | ✅ |
+| US Dollar Index (Broad) → Gold | 0 | − | -0.42 | -0.52 | -0.53 | -0.49 | 100% | 238 | ✅ |
+| US Dollar Index (Broad) → WTI Crude Oil | 0 | − | -0.42 | -0.65 | -0.54 | +0.20 | 91% | 238 | ✅ |
+| US Dollar Index (Broad) → Copper | 0 | − | -0.56 | -0.77 | -0.76 | -0.38 | 100% | 238 | ✅ |
+| 10Y Real Yield (TIPS) → Gold | 0 | − | -0.46 | -0.44 | -0.42 | -0.57 | 98% | 274 | ✅ |
+| 10Y Real Yield (TIPS) → Bitcoin | 0 | − | -0.06 | -0.31 | -0.22 | -0.21 | 81% | 145 | ✅ |
+| Gold → Silver | 0 | + | +0.69 | +0.78 | +0.77 | +0.83 | 99% | 442 | ✅ |
+| WTI Crude Oil → Brent Crude Oil | 0 | + | +0.94 | +0.98 | +0.98 | +0.98 | 100% | 442 | ✅ |
+| Bitcoin → Ethereum | 0 | + | +0.54 | +0.89 | +0.89 | +0.84 | 100% | 123 | ✅ |
 
 ### 목록에 없는 강한 관계 (r 12m 상위 15, 설명 추가 후보)
 
 | A | B | r 12m | n |
 |---|---|---|---|
 | Nonfarm Payrolls (change) | Employment-Population Ratio | +0.97 | 440 |
-| Unemployment Rate | Employment-Population Ratio | -0.96 | 440 |
 | 2Y Treasury Yield | 3M Treasury Bill | +0.89 | 442 |
-| 10Y Treasury Yield | 2Y Treasury Yield | +0.82 | 442 |
 | Yield Curve (10Y-2Y) | 3M Treasury Bill | -0.81 | 442 |
-| 10Y Treasury Yield | 10Y Real Yield (TIPS) | +0.80 | 274 |
 | Labor Force Participation | Employment-Population Ratio | +0.78 | 440 |
-| Gold | Silver | +0.78 | 442 |
-| Fed Funds Rate | Yield Curve (10Y-2Y) | -0.78 | 442 |
-| US Dollar Index (Broad) | Copper | -0.77 | 238 |
 | PPI Final Demand (YoY) | 5Y Breakeven Inflation | +0.75 | 180 |
 | Nonfarm Payrolls (change) | Labor Force Participation | +0.75 | 440 |
 | 2Y Treasury Yield | Yield Curve (10Y-2Y) | -0.74 | 442 |
 | Industrial Production | Job Openings (JOLTS) | +0.72 | 298 |
 | 30Y Treasury Yield | 10Y Real Yield (TIPS) | +0.72 | 274 |
+| 5Y Breakeven Inflation | Excess Bond Premium | -0.71 | 274 |
+| Unemployment Rate | Job Openings (JOLTS) | -0.71 | 297 |
+| Industrial Production | Employment-Population Ratio | +0.70 | 440 |
+| PPI Final Demand (YoY) | Natural Gas (US) | +0.70 | 180 |
+| 5Y Breakeven Inflation | Copper | +0.70 | 274 |
+| Industrial Production | Nonfarm Payrolls (change) | +0.70 | 442 |
 
 ### 데이터 범위
 
@@ -102,13 +110,13 @@
 | EUR/USD | Federal Reserve Board H.10 | 1999-01 | 2026-10 | 334 |
 | USD/JPY | Federal Reserve Board H.10 | 1971-01 | 2026-10 | 670 |
 
-파일 크기: series.json 103KB, edges.json 748KB
+파일 크기: series.json 103KB, edges.json 748KB, theory.json 58KB
 
 ## KR
 
 ### 기대 관계 검증
 
-결과: ✅ 3 · 🟡 2 · ⚪ 2 · ❌ 1
+결과: ✅ 8 · 🟡 1 · ⚪ 4 · ❌ 1
 
 - 기간: 1990-01 ~ 2026-10 · 변화량 기준 상관계수 (금리는 차이, 가격은 로그 변화율)
 - `r 1m`: 월간 변화끼리 · `r 12m`: 12개월 변화끼리 (경기 흐름에 가까움, 겹치는 구간이라 표본이 실제보다 적은 효과)
@@ -120,26 +128,28 @@
 | A → B | 지연 | 기대 | r 1m | r 12m | 순위 12m | 최근 관계선 | 부호 유지율 | n | 판정 |
 |---|---|---|---|---|---|---|---|---|---|
 | BOK Base Rate → KTB 3Y Yield | 0 | + | +0.27 | +0.53 | +0.55 | +0.42 | 100% | 318 | ✅ |
+| KTB 3Y Yield → KTB 10Y Yield | 0 | + | +0.90 | +0.90 | +0.90 | +0.97 | 100% | 301 | ✅ |
+| BOK Base Rate → Yield Curve (10Y-3Y) | 0 | − | -0.31 | -0.71 | -0.62 | -0.55 | 100% | 301 | ✅ |
 | CPI Inflation (YoY) → BOK Base Rate | 6 | + | +0.01 | +0.14 | +0.18 | +0.50 | 59% | 318 | ⚪ |
-| BOK Base Rate → USD/KRW | 0 | − | -0.17 | -0.25 | -0.12 | +0.05 | 64% | 318 | 🟡 |
-| KR-US Policy Rate Gap → USD/KRW | 0 | − | +0.09 | +0.29 | +0.18 | -0.03 | 43% | 318 | ❌ |
-| KTB 10Y Yield → 10Y Treasury Yield | 0 | + | +0.58 | +0.63 | +0.61 | +0.67 | 100% | 301 | ✅ |
-| US Dollar Index (Broad) → USD/KRW | 0 | + | +0.73 | +0.67 | +0.65 | +0.73 | 100% | 238 | ✅ |
+| Unemployment Rate → BOK Base Rate | 3 | − | +0.06 | -0.36 | -0.41 | -0.17 | 72% | 314 | ✅ |
+| Unemployment Rate → CPI Inflation (YoY) | 12 | − | -0.04 | -0.10 | -0.04 | -0.03 | 50% | 305 | ⚪ |
 | Yield Curve (10Y-3Y) → Unemployment Rate | 12 | − | -0.10 | -0.10 | +0.02 | -0.13 | 73% | 289 | ⚪ |
-| WTI Crude Oil → CPI Inflation (YoY) | 0 | + | +0.08 | +0.17 | +0.22 | +0.44 | 90% | 442 | 🟡 |
+| Fed Funds Rate → BOK Base Rate | 3 | + | +0.26 | +0.65 | +0.54 | +0.50 | 86% | 318 | ✅ |
+| 10Y Treasury Yield → KTB 10Y Yield | 0 | + | +0.58 | +0.63 | +0.61 | +0.67 | 100% | 301 | ✅ |
+| KR-US Policy Rate Gap → USD/KRW | 0 | − | +0.09 | +0.29 | +0.18 | -0.03 | 43% | 318 | ❌ |
+| US Dollar Index (Broad) → USD/KRW | 0 | + | +0.73 | +0.67 | +0.65 | +0.73 | 100% | 238 | ✅ |
+| USD/KRW → CPI Inflation (YoY) | 6 | + | -0.08 | -0.06 | -0.11 | +0.00 | 15% | 436 | ⚪ |
+| WTI Crude Oil → CPI Inflation (YoY) | 3 | + | +0.06 | +0.30 | +0.32 | +0.30 | 80% | 439 | 🟡 |
+| Bitcoin → Ethereum | 0 | + | +0.54 | +0.89 | +0.89 | +0.84 | 100% | 123 | ✅ |
 
 ### 목록에 없는 강한 관계 (r 12m 상위 15, 설명 추가 후보)
 
 | A | B | r 12m | n |
 |---|---|---|---|
-| KTB 10Y Yield | KTB 3Y Yield | +0.90 | 301 |
-| Bitcoin | Ethereum | +0.89 | 123 |
 | KR-US Policy Rate Gap | Fed Funds Rate | -0.82 | 318 |
-| BOK Base Rate | Yield Curve (10Y-3Y) | -0.71 | 301 |
 | US Dollar Index (Broad) | WTI Crude Oil | -0.65 | 238 |
 | USD/KRW | Bitcoin | -0.63 | 145 |
 | USD/KRW | Ethereum | -0.63 | 123 |
-| BOK Base Rate | Fed Funds Rate | +0.63 | 318 |
 | US Dollar Index (Broad) | Bitcoin | -0.62 | 145 |
 | US Dollar Index (Broad) | Ethereum | -0.54 | 123 |
 | KTB 3Y Yield | CPI Inflation (YoY) | +0.54 | 366 |
@@ -147,6 +157,10 @@
 | US Dollar Index (Broad) | Gold | -0.52 | 238 |
 | BOK Base Rate | WTI Crude Oil | +0.46 | 318 |
 | Yield Curve (10Y-3Y) | Fed Funds Rate | -0.45 | 301 |
+| USD/KRW | WTI Crude Oil | -0.44 | 442 |
+| Yield Curve (10Y-3Y) | Bitcoin | +0.43 | 145 |
+| KR-US Policy Rate Gap | 10Y Treasury Yield | -0.43 | 318 |
+| 10Y Treasury Yield | WTI Crude Oil | +0.41 | 442 |
 
 ### 데이터 범위
 
@@ -168,4 +182,4 @@
 | Ethereum | Kraken | 2015-08 | 2026-10 | 135 |
 | WTI Crude Oil | World Bank Pink Sheet | 1982-01 | 2026-10 | 538 |
 
-파일 크기: series.json 39KB, edges.json 136KB
+파일 크기: series.json 39KB, edges.json 136KB, theory.json 21KB

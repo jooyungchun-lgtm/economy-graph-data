@@ -1,6 +1,6 @@
 {
  "schema": 1,
- "generated_utc": "2026-11-22T11:02:00+00:00",
+ "generated_utc": "2026-11-22T12:22:38+00:00",
  "through": "2026-10",
  "complete": true,
  "files": {
@@ -12,6 +12,10 @@
    "sha256": "8192b0bb52eb15c33e8df4f6c41ee3ddd059e41b23b7b842d945fccc4b532604",
    "bytes": 39761
   },
+  "kr/theory.json": {
+   "sha256": "f777ec2ee3c6b65d9a7e1867aa677bcf8726cee98cf09ad9764163438f116aa3",
+   "bytes": 21498
+  },
   "us/edges.json": {
    "sha256": "5e91d6c73e8494714192239219822571882a65a2f7acb757efb9ce7dc85547b9",
    "bytes": 766419
@@ -19,6 +23,10 @@
   "us/series.json": {
    "sha256": "4d01eeb5e0c4c835f6340b3a76c3fb2b712449f455ae549982ee7364079e6785",
    "bytes": 105708
+  },
+  "us/theory.json": {
+   "sha256": "babdf10ee36770664fd54f61935cd7e905c22cedba55d151932f60a8c830d58a",
+   "bytes": 59067
   }
  }
 }

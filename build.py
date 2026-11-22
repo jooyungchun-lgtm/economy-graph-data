@@ -200,6 +200,29 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
         json.dump({"country": code, "window": WINDOW, "change_months": EDGE_H, "method": EDGE_METHOD,
                    "show_tiers": SHOW_TIERS, "edges": edges}, f, separators=(",", ":"))
 
+    # theory.json: textbook relationships, lag-aware rolling correlation per month + the pair's
+    # usual range over history, so the app can say "holding / quiet / reversed" and "unusual".
+    def pct(xs, q):
+        s = sorted(xs)
+        return round(s[min(len(s) - 1, max(0, int(round(q * (len(s) - 1)))))], 2)
+    theory = []
+    for a, b, sign, lag in pairs:
+        if a not in levels or b not in levels:
+            continue
+        start_a = lo + WINDOW - 1                       # window end, in A's months
+        vals = rolling(chE[a], chE[b], lag, start_a, last - lag)
+        k = next((i for i, r in enumerate(vals) if r is not None), None)
+        if k is None:
+            continue
+        aligned = [r * sign for r in vals if r is not None]
+        theory.append({"a": a, "b": b, "sign": sign, "lag": lag,
+                       "start": ym(start_a + k + lag),   # indexed by the month B is observed
+                       "r": vals[k:],
+                       "typical": {"p10": pct(aligned, 0.1), "p50": pct(aligned, 0.5), "p90": pct(aligned, 0.9)}})
+    with open(os.path.join(OUT, code, "theory.json"), "w") as f:
+        json.dump({"country": code, "window": WINDOW, "change_months": EDGE_H, "method": EDGE_METHOD,
+                   "pairs": theory}, f, separators=(",", ":"))
+
     # report section
     name_of = {row[0]: row[1] for row in spec}
     L = [f"## {code.upper()}\n", "### 기대 관계 검증\n",
@@ -259,7 +282,7 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
     missing = [row[1] for row in spec if row[0] not in levels]
     if missing:
         L.append(f"\n누락 지표: {', '.join(missing)}")
-    sizes = {fn: os.path.getsize(os.path.join(OUT, code, fn)) for fn in ("series.json", "edges.json")}
+    sizes = {fn: os.path.getsize(os.path.join(OUT, code, fn)) for fn in ("series.json", "edges.json", "theory.json")}
     L.append(f"\n파일 크기: " + ", ".join(f"{k} {v / 1024:.0f}KB" for k, v in sizes.items()))
     return L
 
