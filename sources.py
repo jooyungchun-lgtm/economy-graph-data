@@ -26,6 +26,18 @@ Monthly = dict[str, float]
 
 
 # ---------------------------------------------------------------- http + cache
+SECRET_ENV = ("ECOS_API_KEY", "BLS_API_KEY")
+
+
+def redact(text: str) -> str:
+    """Never let API keys reach logs, reports or exceptions (ECOS puts the key in the URL path)."""
+    for name in SECRET_ENV:
+        v = os.environ.get(name)
+        if v:
+            text = text.replace(v, "***")
+    return text
+
+
 def _get(url: str, cache_name: str, data: bytes | None = None, headers: dict | None = None) -> bytes:
     os.makedirs(CACHE, exist_ok=True)
     path = os.path.join(CACHE, cache_name)
@@ -45,7 +57,7 @@ def _get(url: str, cache_name: str, data: bytes | None = None, headers: dict | N
             last = e
             time.sleep(3 * (attempt + 1))
     else:
-        raise RuntimeError(f"download failed: {url}: {last}")
+        raise RuntimeError(redact(f"download failed: {url}: {last}"))
     with open(path + ".tmp", "wb") as f:
         f.write(body)
     os.replace(path + ".tmp", path)

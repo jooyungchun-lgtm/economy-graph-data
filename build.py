@@ -62,8 +62,9 @@ def fetch_all(with_kr: bool) -> tuple[dict, list[str]]:
             raw.update(got)
             print(f"  ok   {name}: {len(got)} series")
         except Exception as e:  # keep going; report what failed
-            errors.append(f"{name}: {e}")
-            print(f"  FAIL {name}: {e}")
+            msg = S.redact(f"{name}: {e}")
+            errors.append(msg)
+            print(f"  FAIL {msg}")
     return raw, errors
 
 

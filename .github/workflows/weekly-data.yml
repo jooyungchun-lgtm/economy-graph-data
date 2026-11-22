@@ -15,7 +15,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -26,12 +26,19 @@ jobs:
       # Standard library only: nothing to install.
       # build.py exits 1 if any source fails; then nothing is committed and the
       # previous (complete) data stays published. GitHub emails the owner on failure.
+      # Sources (ECOS in particular) sometimes time out from overseas runners, so a
+      # failed build is retried once after 10 minutes; downloads that already
+      # succeeded are reused from the cache.
       - name: Build data
         env:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
           REQUIRE_KR: "1"
-        run: python build.py
+        run: |
+          python build.py && exit 0
+          echo "::warning::Build failed; retrying in 10 minutes."
+          sleep 600
+          python build.py
 
       - name: Commit updated data
         run: |
