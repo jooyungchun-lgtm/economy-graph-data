@@ -30,6 +30,7 @@ jobs:
         env:
           ECOS_API_KEY: ${{ secrets.ECOS_API_KEY }}
           BLS_API_KEY: ${{ secrets.BLS_API_KEY }}
+          REQUIRE_KR: "1"
         run: python build.py
 
       - name: Commit updated data

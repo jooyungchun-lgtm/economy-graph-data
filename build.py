@@ -287,6 +287,10 @@ def main():
     with_kr = bool(os.environ.get("ECOS_API_KEY"))
     print("fetching ...")
     raw, errors = fetch_all(with_kr)
+    if not with_kr and os.environ.get("REQUIRE_KR"):
+        # in CI a missing key must fail the run, otherwise stale Korea files would be republished as current
+        errors.append("ECOS: ECOS_API_KEY secret is not set")
+        print("  FAIL ECOS: ECOS_API_KEY secret is not set")
 
     report = [f"# 데이터 수집 시제품 결과\n", f"생성: {now:%Y-%m-%d %H:%M} UTC · 기준월: {ym(cutoff - 1)}까지\n"]
     if errors:
