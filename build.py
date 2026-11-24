@@ -4,7 +4,7 @@
   ECOS_API_KEY=... python3 pipeline/build.py   # also builds Korea
 
 Outputs (what the app would download):
-  out/<country>/series.json  monthly levels per indicator (full history from 1970)
+  out/<country>/series.json  monthly levels per indicator (full history from 1947)
   out/<country>/edges.json   rolling 36-month correlation of monthly changes for every pair,
                              one value per month (drives the time machine)
   out/report.md              validation of expected relationships + data coverage
@@ -22,8 +22,8 @@ import indicators as I  # noqa: E402
 import sources as S  # noqa: E402
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
-HISTORY_FROM = "1970-01"
-CORR_FROM = "1990-01"      # correlation sample start
+HISTORY_FROM = "1947-01"
+CORR_FROM = HISTORY_FROM      # correlation sample start
 # Relationship-line basis, chosen by experiment_edges.py (2026-11-22):
 # 3-month changes, 60-month window, rank correlation, line drawn when |r| >= 0.4.
 EDGE_H = 3                 # change horizon (months)
@@ -54,12 +54,12 @@ def fetch_all(with_kr: bool) -> tuple[dict, list[str]]:
     jobs = [(f"Fed {r}", lambda r=r, s=s: S.fed_release(r, s)) for r, s in I.FED.items()]
     jobs += [
         ("Fed EBP", S.fed_ebp),
-        ("BLS", lambda: S.bls(I.BLS, 1969, now_year)),
+        ("BLS", lambda: S.bls(I.BLS, int(HISTORY_FROM[:4]) - 1, now_year)),
         ("World Bank Pink Sheet", lambda: S.pink_sheet(I.PINK)),
         ("Kraken", lambda: S.kraken(I.KRAKEN)),
     ]
     if with_kr:
-        jobs.append(("ECOS", lambda: S.ecos(I.ECOS, "196001", f"{now_year}12")))
+        jobs.append(("ECOS", lambda: S.ecos(I.ECOS, f"{int(HISTORY_FROM[:4]) - 1}01", f"{now_year}12")))
     for name, fn in jobs:
         try:
             got = fn()
@@ -188,7 +188,7 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
             series.append({"id": iid, "name": name, "unit": unit, "source": src, "transform": t,
                            "start": ym(ms[0]), "values": [levels[iid].get(m) for m in range(ms[0], ms[-1] + 1)]})
     with open(os.path.join(OUT, code, "series.json"), "w") as f:
-        json.dump({"country": code, "series": series}, f, separators=(",", ":"))
+        json.dump({"country": code, "history_from": HISTORY_FROM, "series": series}, f, separators=(",", ":"))
 
     # edges.json: rolling correlation for every pair (time machine)
     ids = [s["id"] for s in series]
@@ -213,7 +213,7 @@ def build_country(code: str, spec: list, levels: dict, pairs: list, cutoff: int)
     for a, b, sign, lag in pairs:
         if a not in levels or b not in levels:
             continue
-        # window end, in A's months; full history (from 1970) so 20-year windows exist early on
+        # window end, in A's months; full history (from 1947) so 20-year windows exist early on
         start_a = mi(HISTORY_FROM) + THEORY_MIN_OBS - 1
         vals = rolling(chE[a], chE[b], lag, start_a, last - lag, THEORY_WINDOW, THEORY_MIN_OBS)
         k = next((i for i, r in enumerate(vals) if r is not None), None)
@@ -305,7 +305,7 @@ def write_manifest(now, cutoff: int, errors: list[str]) -> None:
             with open(p, "rb") as f:
                 files[f"{code}/{fn}"] = {"sha256": hashlib.sha256(f.read()).hexdigest(), "bytes": os.path.getsize(p)}
     manifest = {"schema": 1, "generated_utc": now.isoformat(timespec="seconds"), "through": ym(cutoff - 1),
-                "complete": not errors, "files": files}
+                "history_from": HISTORY_FROM, "complete": not errors, "files": files}
     with open(os.path.join(OUT, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=1)
 
