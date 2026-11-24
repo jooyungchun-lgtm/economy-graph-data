@@ -42,7 +42,7 @@ ECOS_API_KEY=발급받은키 python3 pipeline/build.py
 
 | 파일 | 내용 | 크기 (미국, 32개 지표) |
 |---|---|---|
-| `us/series.json` | 지표별 월별 값 (1970년~) | 103KB → gzip 40KB |
+| `us/series.json` | 지표별 월별 값 (1947년~ · 지표별 실제 시작월 적용) | 103KB → gzip 40KB |
 | `us/edges.json` | 모든 지표 쌍의 60개월 롤링 순위 상관계수(3개월 변화), 매월 하나씩 (타임머신용) | 748KB → gzip 118KB |
 | `report.md` | 기대 관계 검증, 강한 관계 후보, 데이터 범위 | — |
 
@@ -133,3 +133,5 @@ ECOS_API_KEY=발급받은키 python3 pipeline/build.py
 - 한국 주변 지표 추가 (수출, 경상수지, 가계신용, 주택가격, M2 등, ECOS 통계 코드 확인 필요)
 - BEA(GDP·PCE), Census(소매판매·주택), EIA, 모기지 금리, 필라델피아 연준 지수 (BEA는 무료 키 필요)
 - GitHub Actions 워크플로와 배포 설정
+
+`history_from: "1947-01"`은 manifest와 series 파일의 탐색 시작월이다. 각 지표 start는 실제 관측 시작월이며, 상관관계 시작월과 독립이다. BLS/ECOS는 전년비 경계 계산을 위해 1946년부터 요청한다. 한국 계열의 실제 시작은 원천 정의를 따르며 과거 자료를 추정하지 않는다.
